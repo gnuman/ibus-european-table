@@ -1,0 +1,67 @@
+Name:       ibus-european-table
+Version:    1.1.0
+Release:    1%{?dist}
+Summary:    The Table engine for IBus platform
+License:    LGPLv2+
+Group:      System Environment/Libraries
+URL:        http://git.fedorahosted.org/git/?p=ibus-european-table.git
+Source0:    https://fedoraproject.org/wiki/File:{name}-%{version}.tar.gz
+
+BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:  noarch
+
+BuildRequires:  gettext-devel
+
+Requires:   ibus
+
+%description
+The package contains general Table engine for IBus platform.
+
+%package additional
+Summary:    Additional tables for general table engine of IBus.
+Group:      System Environment/Libraries
+Requires:   %{name} = %{version}-%{release}
+
+%description additional
+This package contains additional tables.
+
+%prep
+%setup -q
+
+%build
+%configure \
+	--disable-static \
+	--enable-additional
+
+make %{?_smp_mflags}
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make DESTDIR=${RPM_BUILD_ROOT} NO_INDEX=true install
+
+%find_lang %{name}
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post additional
+ibus-european-table-createdb -i -n %{_datadir}/ibus-european-table/european-tables/additional/compose.db
+ibus-european-table-createdb -i -n %{_datadir}/ibus-european-table/european-tables/additional/latex.db
+
+%files -f %{name}.lang
+%defattr(-,root,root,-)
+%doc AUTHORS COPYING README
+%{_libdir}/pkgconfig/ibus-european-table.pc
+%{_datadir}/ibus-european-table/engine
+%{_datadir}/ibus-european-table/data
+%{_datadir}/ibus-european-table/european-tables/template.txt
+%dir %{_datadir}/ibus-european-table/european-tables
+%{_datadir}/ibus-european-table/icons/ibus-european-table.svg
+%dir %{_datadir}/ibus-european-table/icons
+%{_bindir}/ibus-european-engine-table
+%{_bindir}/ibus-european-table-createdb
+
+
+%changelog
+* Tue Nov 22 2011 Anish Patil <anish.developer@gmail.com> - 1.1.0-1
+- The Initial version.

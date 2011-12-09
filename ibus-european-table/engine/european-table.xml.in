@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- filename: indic-table.xml -->
+<component>
+    <name>org.freedesktop.IBus.IndicTable</name>
+    <description>Table Component</description>
+    <exec>${libexecdir}/ibus-engine-indic-table --ibus</exec>
+    <version>1.3.1</version>
+    <author>Naveen Kumar &lt;nav007@gmail.com&gt;</author>
+    <license>LGPL</license>
+    <homepage>http://code.google.com/p/ibus</homepage>
+    <textdomain>ibus-indic-table</textdomain>
+    <observed-paths>
+        <path>${pkgdatadir}/indic-tables/</path>
+    </observed-paths>
+    <engines exec='${libexecdir}/ibus-engine-indic-table --xml'/>
+</component>
